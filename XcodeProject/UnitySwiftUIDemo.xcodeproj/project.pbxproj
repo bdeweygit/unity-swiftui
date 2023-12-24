@@ -7,13 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B53E02802B38E110008D4E31 /* UnityFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B53E027E2B38E110008D4E31 /* UnityFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B57974CB2B38D8CC00A28CAF /* UnitySwiftUIDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57974CA2B38D8CC00A28CAF /* UnitySwiftUIDemoApp.swift */; };
 		B57974CD2B38D8CC00A28CAF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57974CC2B38D8CC00A28CAF /* ContentView.swift */; };
 		B57974CF2B38D8CD00A28CAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B57974CE2B38D8CD00A28CAF /* Assets.xcassets */; };
 		B57974D22B38D8CD00A28CAF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B57974D12B38D8CD00A28CAF /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		B53E02812B38E110008D4E31 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B53E02802B38E110008D4E31 /* UnityFramework.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		B53E027E2B38E110008D4E31 /* UnityFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UnityFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B57974C72B38D8CC00A28CAF /* UnitySwiftUIDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UnitySwiftUIDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B57974CA2B38D8CC00A28CAF /* UnitySwiftUIDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitySwiftUIDemoApp.swift; sourceTree = "<group>"; };
 		B57974CC2B38D8CC00A28CAF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -32,11 +48,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B53E027D2B38E110008D4E31 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B53E027E2B38E110008D4E31 /* UnityFramework.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B57974BE2B38D8CC00A28CAF = {
 			isa = PBXGroup;
 			children = (
 				B57974C92B38D8CC00A28CAF /* UnitySwiftUIDemo */,
 				B57974C82B38D8CC00A28CAF /* Products */,
+				B53E027D2B38E110008D4E31 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,6 +102,7 @@
 				B57974C32B38D8CC00A28CAF /* Sources */,
 				B57974C42B38D8CC00A28CAF /* Frameworks */,
 				B57974C52B38D8CC00A28CAF /* Resources */,
+				B53E02812B38E110008D4E31 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -275,6 +301,7 @@
 				DEVELOPMENT_TEAM = 423K6KPQYX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Unity SwiftUI Demo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -304,6 +331,7 @@
 				DEVELOPMENT_TEAM = 423K6KPQYX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Unity SwiftUI Demo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
