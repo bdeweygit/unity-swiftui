@@ -8,48 +8,43 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var fullscreen = true
-    @State private var ignoreSafeArea = true
+    @State private var playerSize = 0
     @State private var miniplayerSquare = true
     @State private var miniplayerAlignment = Alignment.top
 
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                ZStack(alignment: miniplayerAlignment) {
+        GeometryReader(content: { geometry in
+            ZStack(content: {
+                ZStack(alignment: miniplayerAlignment, content: {
                     Color.clear
-                    UnityView().if(fullscreen && ignoreSafeArea, transform: { view in
-                        view.ignoresSafeArea()
-                    }).if(!fullscreen && miniplayerSquare, transform: { view in
-                        view.frame(width: 200, height: 200)
-                    }).if(!fullscreen && !miniplayerSquare, transform: { view in
-                        view.frame(width: geometry.size.width * 0.5, height: geometry.size.height * 0.5)
+                    UIViewContainer(containee: Unity.shared.getUIView()).if(playerSize == 0, transform: {
+                        $0.ignoresSafeArea()
+                    }).if(playerSize == 2 && miniplayerSquare, transform: {
+                        $0.frame(width: 200, height: 200)
+                    }).if(playerSize == 2 && !miniplayerSquare, transform: {
+                        $0.frame(width: geometry.size.width * 0.5, height: geometry.size.height * 0.5)
                     })
-                }
-                VStack {
-                    Picker("Player size", selection: $fullscreen) {
-                        Text("Fullscreen").tag(true)
-                        Text("Miniplayer").tag(false)
-                    }.pickerStyle(.segmented)
-                    if fullscreen {
-                        Picker("Fullscreen fill", selection: $ignoreSafeArea) {
-                            Text("Full area").tag(true)
-                            Text("Safe area").tag(false)
-                        }.pickerStyle(.segmented)
-                    } else {
-                        Picker("Miniplayer alignment", selection: $miniplayerAlignment) {
+                })
+                VStack(content: {
+                    Picker("Player size", selection: $playerSize, content: {
+                        Text("Fullscreen").tag(0)
+                        Text("Safe area").tag(1)
+                        Text("Miniplayer").tag(2)
+                    }).pickerStyle(.segmented)
+                    if playerSize == 2 {
+                        Picker("Miniplayer alignment", selection: $miniplayerAlignment, content: {
                             Text("Top").tag(Alignment.top)
                             Text("Center").tag(Alignment.center)
                             Text("Bottom").tag(Alignment.bottom)
-                        }.pickerStyle(.segmented)
-                        Picker("Miniplayer shape", selection: $miniplayerSquare) {
+                        }).pickerStyle(.segmented)
+                        Picker("Miniplayer shape", selection: $miniplayerSquare, content: {
                             Text("Square").tag(true)
                             Text("Aspect").tag(false)
-                        }.pickerStyle(.segmented)
+                        }).pickerStyle(.segmented)
                     }
-                }.padding()
-            }
-        }
+                }).padding()
+            })
+        })
     }
 }
 

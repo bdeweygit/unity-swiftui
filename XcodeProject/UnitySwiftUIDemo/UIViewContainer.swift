@@ -1,0 +1,22 @@
+//
+//  UIViewContainer.swift
+//  UnitySwiftUIDemo
+//
+//  Created by Benjamin Dewey on 12/31/23.
+//
+
+import SwiftUI
+
+struct UIViewContainer: UIViewRepresentable {
+    var containee: UIView
+
+    func makeUIView(context: Context) -> UIView {
+        return containee
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
+}
+
+#Preview {
+    UIViewContainer(containee: UIView(frame: .zero))
+}
