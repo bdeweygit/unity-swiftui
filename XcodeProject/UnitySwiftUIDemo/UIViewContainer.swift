@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UIViewContainer: UIViewRepresentable {
-    var containee: UIView
+    let containee: UIView
 
     func makeUIView(context: Context) -> UIView {
         return containee
