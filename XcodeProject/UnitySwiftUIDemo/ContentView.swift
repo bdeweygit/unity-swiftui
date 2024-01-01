@@ -20,13 +20,20 @@ struct ContentView: View {
                 ZStack(content: {
                     ZStack(alignment: miniplayerAlignment, content: {
                         Color.clear
-                        UnityContainer.if(playerSize == 0, transform: {
-                            $0.ignoresSafeArea()
-                        }).if(playerSize == 2 && miniplayerSquare, transform: {
-                            $0.frame(width: 200, height: 200)
-                        }).if(playerSize == 2 && !miniplayerSquare, transform: {
-                            $0.frame(width: geometry.size.width * 0.5, height: geometry.size.height * 0.5)
-                        })
+                        if playerSize == 0 {
+                            UnityContainer.ignoresSafeArea()
+                        } else if playerSize == 1 {
+                            UnityContainer
+                        } else {
+                            let halfWidth = geometry.size.width * 0.5
+                            let halfHeight = geometry.size.height * 0.5
+                            if miniplayerSquare {
+                                let minAxis = min(halfWidth, halfHeight)
+                                UnityContainer.frame(width: minAxis, height: minAxis)
+                            } else {
+                                UnityContainer.frame(width: halfWidth, height: halfHeight)
+                            }
+                        }
                     })
                     VStack(content: {
                         Picker("Player size", selection: $playerSize, content: {
@@ -74,16 +81,6 @@ extension Alignment: Hashable {
         case .center: hasher.combine(1)
         case .bottom: hasher.combine(2)
         default: hasher.combine(3) // Handle custom alignments if needed
-        }
-    }
-}
-
-extension View {
-    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
         }
     }
 }
