@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var playerSize = 0
     @State private var loading = false
-    @State private var miniplayerSquare = true
+    @State private var playerDisplay = 0 // TODO: replace with an enum
+    @State private var miniplayerDisplay = 0 // TODO: replace with an enum
     @State private var UnityContainer: UIViewContainer?
     @State private var miniplayerAlignment = Alignment.top
 
@@ -20,36 +20,37 @@ struct ContentView: View {
                 ZStack(content: {
                     ZStack(alignment: miniplayerAlignment, content: {
                         Color.clear
-                        if playerSize == 0 {
+                        if playerDisplay == 0 { // Fullscreen
                             UnityContainer.ignoresSafeArea()
-                        } else if playerSize == 1 {
+                        } else if playerDisplay == 1 { // Safe area
                             UnityContainer
-                        } else {
-                            let halfWidth = geometry.size.width * 0.5
-                            let halfHeight = geometry.size.height * 0.5
-                            if miniplayerSquare {
-                                let minAxis = min(halfWidth, halfHeight)
-                                UnityContainer.frame(width: minAxis, height: minAxis)
-                            } else {
-                                UnityContainer.frame(width: halfWidth, height: halfHeight)
+                        } else { // Miniplayer
+                            let scale = 0.5
+                            let width = geometry.size.width * scale
+                            let height = geometry.size.height * scale
+                            if miniplayerDisplay == 0 { // Square
+                                let length = min(width, height)
+                                UnityContainer.frame(width: length, height: length)
+                            } else { // Aspect
+                                UnityContainer.frame(width: width, height: height)
                             }
                         }
                     })
                     VStack(content: {
-                        Picker("Player size", selection: $playerSize, content: {
+                        Picker("Player display", selection: $playerDisplay, content: {
                             Text("Fullscreen").tag(0)
                             Text("Safe area").tag(1)
                             Text("Miniplayer").tag(2)
                         }).pickerStyle(.segmented)
-                        if playerSize == 2 {
+                        if playerDisplay == 2 { // Miniplayer
                             Picker("Miniplayer alignment", selection: $miniplayerAlignment, content: {
                                 Text("Top").tag(Alignment.top)
                                 Text("Center").tag(Alignment.center)
                                 Text("Bottom").tag(Alignment.bottom)
                             }).pickerStyle(.segmented)
-                            Picker("Miniplayer shape", selection: $miniplayerSquare, content: {
-                                Text("Square").tag(true)
-                                Text("Aspect").tag(false)
+                            Picker("Miniplayer display", selection: $miniplayerDisplay, content: {
+                                Text("Square").tag(0)
+                                Text("Aspect").tag(1)
                             }).pickerStyle(.segmented)
                         }
                     }).padding()
