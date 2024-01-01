@@ -19,12 +19,12 @@ class Unity: SetsNativeState {
         bundle.load()
         self.framework = bundle.principalClass!.getInstance()!
 
-        // Set header for unity CrashReporter; is this needed?
+        // Set header for framework's CrashReporter; is this needed?
         let machineHeader = UnsafeMutablePointer<MachHeader>.allocate(capacity: 1)
         machineHeader.pointee = _mh_execute_header
         self.framework.setExecuteHeader(machineHeader)
 
-        // Set bundle containing unity's data folder
+        // Set bundle containing framework's data folder
         self.framework.setDataBundleId("com.unity3d.framework")
 
         // Register as the native state setter
@@ -42,11 +42,9 @@ class Unity: SetsNativeState {
         self.framework.appController().window.isUserInteractionEnabled = false
     }
 
-    func getUIView() -> UIView {
-        return self.framework.appController().rootView
-    }
+    var view: UIView { self.framework.appController().rootView }
 
-    /* This will point to a C# function in unity once a script
+    /* This will point to a C# function in Unity once a script
      calls the NativeState plugin's _OnSetNativeState function */
     var setNativeState: SetNativeStateCallback?
 }
