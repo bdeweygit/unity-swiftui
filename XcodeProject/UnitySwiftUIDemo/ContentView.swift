@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UnityFramework
 
 struct ContentView: View {
     @State private var loading = false
@@ -15,7 +16,7 @@ struct ContentView: View {
     @State private var miniplayerAlignment = Alignment.top
 
     var body: some View {
-        if let UnityContainer = UnityContainer {
+        if let UnityContainer = self.UnityContainer {
             GeometryReader(content: { geometry in
                 ZStack(content: {
                     ZStack(alignment: miniplayerAlignment, content: {
@@ -55,15 +56,18 @@ struct ContentView: View {
                         }
                     }).padding()
                 })
+            }).onChange(of: playerDisplay, { // is this the optimal placement? Might need use binding anyways
+                var nativeState = NativeState(cubeScale: Float(playerDisplay))
+                Unity.shared.setNativeState?(&nativeState)
             })
         } else {
             if loading {
                 ProgressView("Loading...")
             } else {
                 Button("Start Unity", action: {
-                    /* Create a container view for Unity. This must be done on
-                     the main thread which will be blocked while Unity starts. Use
-                     async so we can render a ProgressView before the thread blocks. */
+                    /* Create a container view for Unity's UIView. This must be done on
+                     the main thread which will be blocked while the Unity player starts up.
+                     Use async so we can re-render with a ProgressView before the thread blocks. */
                     loading = true
                     DispatchQueue.main.async(execute: {
                         UnityContainer = UIViewContainer(containee: Unity.shared.view)
