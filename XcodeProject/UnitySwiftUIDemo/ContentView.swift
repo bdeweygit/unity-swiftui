@@ -56,7 +56,7 @@ struct ContentView: View {
                         }
                     }).padding()
                 })
-            }).onChange(of: playerDisplay, { // is this the optimal placement? Might need use binding anyways
+            }).onChange(of: playerDisplay, {
                 var nativeState = NativeState(cubeScale: Float(playerDisplay))
                 Unity.shared.setNativeState?(&nativeState)
             })
@@ -66,8 +66,8 @@ struct ContentView: View {
             } else {
                 Button("Start Unity", action: {
                     /* Create a container view for Unity's UIView. This must be done on
-                     the main thread which will be blocked while the Unity player starts up.
-                     Use async so we can re-render with a ProgressView before the thread blocks. */
+                       the main thread which will be blocked while the Unity player starts up.
+                       Use async so we can re-render with a ProgressView before the thread blocks. */
                     loading = true
                     DispatchQueue.main.async(execute: {
                         UnityContainer = UIViewContainer(containee: Unity.shared.view)
