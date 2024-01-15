@@ -6,7 +6,7 @@ typedef void (*SetNativeStateCallback)(const struct NativeState* nextState);
 
 @protocol SetsNativeState
     /* This is the critical method that will be used to send state from Swift to Unity.
-     Encapsulation within a protocol lets us take advantage of Swift's didSet property observer. */
+       Encapsulation within a protocol lets us take advantage of Swift's didSet property observer. */
     @required @property SetNativeStateCallback setNativeState;
 @end
 

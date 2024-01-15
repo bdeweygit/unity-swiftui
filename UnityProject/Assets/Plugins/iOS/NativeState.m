@@ -8,8 +8,8 @@ void RegisterNativeStateSetter(id<SetsNativeState> setter) {
 }
 
 /* Called from Unity. Interop marshals the argument from a C# delegate to a C function pointer.
- See section on marshalling delegates:
- learn.microsoft.com/en-us/dotnet/framework/interop/default-marshalling-behavior */
+   See section on marshalling delegates:
+   learn.microsoft.com/en-us/dotnet/framework/interop/default-marshalling-behavior */
 void OnSetNativeState(SetNativeStateCallback callback) {
     nativeStateSetter.setNativeState = callback;
 }

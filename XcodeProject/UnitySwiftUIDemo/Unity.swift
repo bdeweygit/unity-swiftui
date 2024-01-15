@@ -44,9 +44,9 @@ class Unity: SetsNativeState {
 
     var view: UIView { self.framework.appController().rootView }
 
-    /* This will be set to an underlying C# delegate once one of our
-       Unity scripts calls the NativeState plugin's OnSetNativeState function.
-       See section on using delegates: docs.unity3d.com/Manual/PluginsForIOS.html */
+    /* When a Unity script calls the NativeState plugin's OnSetNativeState function this
+       closure will be set to a C function pointer that was marshaled from a corresponding
+       C# delegate. See section on using delegates: docs.unity3d.com/Manual/PluginsForIOS.html */
     var setNativeState: SetNativeStateCallback? {
         didSet {
             if let setNativeState = self.setNativeState {
