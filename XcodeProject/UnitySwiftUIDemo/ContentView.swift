@@ -79,13 +79,15 @@ struct ContentView: View {
     }
 }
 
+/* Extend Alignment to be Hashable so it can be used as a
+   Picker selection. We only care about top, center, and bottom. */
 extension Alignment: Hashable {
     public func hash(into hasher: inout Hasher) {
         switch self {
         case .top: hasher.combine(0)
         case .center: hasher.combine(1)
         case .bottom: hasher.combine(2)
-        default: hasher.combine(3) // Handle custom alignments if needed
+        default: hasher.combine(3)
         }
     }
 }

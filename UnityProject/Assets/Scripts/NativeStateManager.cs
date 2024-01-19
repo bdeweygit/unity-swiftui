@@ -21,12 +21,13 @@ public static class NativeStateManager
     // Should match the SetNativeStateCallback typedef in Plugins/iOS/NativeState.h
     private delegate void SetNativeStateCallback(in NativeState nextState);
 
-    // Import C function from plugin
+    /* Imported from Plugins/iOS/NativeState.m to pass an instance of
+       SetNativeStateCallback to C. See section on using delegates: docs.unity3d.com/Manual/PluginsForIOS.html */
     [System.Runtime.InteropServices.DllImport("__Internal")]
     private static extern void OnSetNativeState(SetNativeStateCallback callback);
 
-    /* Static method that Swift can call by pointer. See section on calling managed
-       methods from native code: docs.unity3d.com/Manual/ScriptingRestrictions.html */
+    /* Reverse P/Invoke wrapped method to set the state value. iOS is an AOT platform hence the decorator.
+       See section on calling managed methods from native code: docs.unity3d.com/Manual/ScriptingRestrictions.html */
     [AOT.MonoPInvokeCallback(typeof(SetNativeStateCallback))]
     private static void SetState(in NativeState nextState) { State = nextState; }
 
