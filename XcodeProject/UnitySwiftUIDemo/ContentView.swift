@@ -6,17 +6,76 @@
 //
 
 import SwiftUI
+import MetalKit
 import UnityFramework
 
+fileprivate var marble: MTLTexture!
+fileprivate var checkerboard: MTLTexture!
+fileprivate var UnityContainer: UIViewContainer!
+
+fileprivate enum Texture {
+    case none
+    case marble
+    case checkerboard
+}
+fileprivate enum LoadingState {
+    case unloaded
+    case loading
+    case loaded
+}
+
 struct ContentView: View {
-    @State private var loading = false
+    @State private var scale: Float = 1
     @State private var playerDisplay = 0 // TODO: replace with an enum
     @State private var miniplayerDisplay = 0 // TODO: replace with an enum
-    @State private var UnityContainer: UIViewContainer?
+    @State private var texture = Texture.none
+    @State private var progress = LoadingState.unloaded
     @State private var miniplayerAlignment = Alignment.top
 
+    private func sendStateToUnity() {
+        let texture: MTLTexture? = switch self.texture {
+        case .none: nil
+        case .marble: marble
+        case .checkerboard: checkerboard
+        }
+
+        let textureWidth = Int32(texture?.width ?? 0)
+        let textureHeight = Int32(texture?.height ?? 0)
+        let unmanagedTexture = texture.flatMap({ Unmanaged.passUnretained($0) })
+
+        var nativeState = NativeState(scale: scale, textureWidth: textureWidth, textureHeight: textureHeight, texture: unmanagedTexture)
+        Unity.shared.setNativeState?(&nativeState)
+    }
+
     var body: some View {
-        if let UnityContainer = self.UnityContainer {
+        switch progress {
+        case .unloaded:
+            Button("Start Unity", action: {
+                // We have multiple things to load.
+                let loadingGroup = DispatchGroup()
+
+                /* Create a container view for Unity's UIView. This will cause
+                   Unity to load which must occur on the main thread. Use async so
+                   we can update progress and re-render before the UI becomes unresponsive. */
+                DispatchQueue.main.async(group: loadingGroup, execute: {
+                    UnityContainer = UIViewContainer(containee: Unity.shared.view)
+                })
+
+                // Load textures concurrently.
+                let concurrentQueue = DispatchQueue.global(qos: .userInitiated)
+                concurrentQueue.async(group: loadingGroup, execute: {
+                    marble = Bundle.main.url(forResource: "marble", withExtension: "jpg")!.loadTexture()
+                })
+                concurrentQueue.async(group: loadingGroup, execute: {
+                    checkerboard = Bundle.main.url(forResource: "checkerboard", withExtension: "png")!.loadTexture()
+                })
+
+                progress = .loading
+                loadingGroup.notify(queue: .main, execute: { progress = .loaded })
+            }).buttonStyle(.borderedProminent)
+        case .loading:
+            ProgressView("Loading...")
+        case .loaded:
             GeometryReader(content: { geometry in
                 ZStack(content: {
                     ZStack(alignment: miniplayerAlignment, content: {
@@ -38,6 +97,7 @@ struct ContentView: View {
                         }
                     })
                     VStack(content: {
+                        Spacer()
                         Picker("Player display", selection: $playerDisplay, content: {
                             Text("Fullscreen").tag(0)
                             Text("Safe area").tag(1)
@@ -54,32 +114,33 @@ struct ContentView: View {
                                 Text("Aspect").tag(1)
                             }).pickerStyle(.segmented)
                         }
+                        HStack(content: {
+                            Text(String(format: "Scale %.2f", scale))
+                            Slider(value: $scale, in: 1...3)
+                        })
+                        Picker("Texture", selection: $texture, content: {
+                            Text("None").tag(Texture.none)
+                            Text("Marble").tag(Texture.marble)
+                            Text("Checkerboard").tag(Texture.checkerboard)
+                        }).pickerStyle(.segmented)
                     }).padding()
                 })
-            }).onChange(of: playerDisplay, {
-                var nativeState = NativeState(cubeScale: Float(playerDisplay))
-                Unity.shared.setNativeState?(&nativeState)
             })
-        } else {
-            if loading {
-                ProgressView("Loading...")
-            } else {
-                Button("Start Unity", action: {
-                    /* Create a container view for Unity's UIView. This must be done on
-                       the main thread which will be blocked while the Unity player starts up.
-                       Use async so we can re-render with a ProgressView before the thread blocks. */
-                    loading = true
-                    DispatchQueue.main.async(execute: {
-                        UnityContainer = UIViewContainer(containee: Unity.shared.view)
-                        loading = false
-                    })
-                }).buttonStyle(.borderedProminent)
-            }
+            .onChange(of: scale, sendStateToUnity)
+            .onChange(of: texture, sendStateToUnity)
         }
     }
 }
 
-/* Extend Alignment to be Hashable so it can be used as a
+extension URL {
+    func loadTexture() -> MTLTexture {
+        let device = MTLCreateSystemDefaultDevice()!
+        let loader = MTKTextureLoader(device: device)
+        return try! loader.newTexture(URL: self)
+    }
+}
+
+/* Make alignment hashable so it can be used as a
    Picker selection. We only care about top, center, and bottom. */
 extension Alignment: Hashable {
     public func hash(into hasher: inout Hasher) {

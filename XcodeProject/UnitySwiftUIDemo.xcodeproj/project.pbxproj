@@ -14,6 +14,8 @@
 		B57974CD2B38D8CC00A28CAF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57974CC2B38D8CC00A28CAF /* ContentView.swift */; };
 		B57974CF2B38D8CD00A28CAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B57974CE2B38D8CD00A28CAF /* Assets.xcassets */; };
 		B57974D22B38D8CD00A28CAF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B57974D12B38D8CD00A28CAF /* Preview Assets.xcassets */; };
+		B5A008B52B6F62AB00A9BED2 /* marble.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5A008B42B6F62AB00A9BED2 /* marble.jpg */; };
+		B5B11A182B6702AE00EB10CA /* checkerboard.png in Resources */ = {isa = PBXBuildFile; fileRef = B5B11A172B6702AE00EB10CA /* checkerboard.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,6 +41,8 @@
 		B57974CC2B38D8CC00A28CAF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B57974CE2B38D8CD00A28CAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B57974D12B38D8CD00A28CAF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B5A008B42B6F62AB00A9BED2 /* marble.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = marble.jpg; sourceTree = "<group>"; };
+		B5B11A172B6702AE00EB10CA /* checkerboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkerboard.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +84,8 @@
 		B57974C92B38D8CC00A28CAF /* UnitySwiftUIDemo */ = {
 			isa = PBXGroup;
 			children = (
+				B5A008B42B6F62AB00A9BED2 /* marble.jpg */,
+				B5B11A172B6702AE00EB10CA /* checkerboard.png */,
 				B57974CC2B38D8CC00A28CAF /* ContentView.swift */,
 				B50DC7392B4151780013AB7B /* UIViewContainer.swift */,
 				B53E02822B38E664008D4E31 /* Unity.swift */,
@@ -157,8 +163,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5A008B52B6F62AB00A9BED2 /* marble.jpg in Resources */,
 				B57974D22B38D8CD00A28CAF /* Preview Assets.xcassets in Resources */,
 				B57974CF2B38D8CD00A28CAF /* Assets.xcassets in Resources */,
+				B5B11A182B6702AE00EB10CA /* checkerboard.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

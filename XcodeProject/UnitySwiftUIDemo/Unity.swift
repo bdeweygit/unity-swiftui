@@ -8,8 +8,8 @@
 import UnityFramework
 
 class Unity: SetsNativeState {
-    /* UnityFramework is implemented as a singleton class so
-       we will do the same. Singleton init is lazy and thread safe. */
+    /* UnityFramework's principal class is implemented as a singleton
+       so we will do the same. Singleton init is lazy and thread safe. */
     static let shared = Unity()
     private let framework: UnityFramework
 
@@ -52,8 +52,8 @@ class Unity: SetsNativeState {
             if let setNativeState = self.setNativeState {
                 /* We can now send state to Unity. We should assume
                    Unity needs it immediately, so send the current state now. */
-                // TODO: ContentView state bindings
-                var nativeState = NativeState(cubeScale: 0.123)
+                // TODO: ContentView state bindings?
+                var nativeState = NativeState(scale: 1, textureWidth: 0, textureHeight: 0, texture: nil)
                 setNativeState(&nativeState)
             }
         }
