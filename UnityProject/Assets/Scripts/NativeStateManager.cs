@@ -11,7 +11,10 @@ namespace System.Runtime.CompilerServices
 // Should match the NativeState struct in Plugins/iOS/NativeState.h
 public readonly struct NativeState
 {
-    public float cubeScale { get; init; }
+    public float scale { get; init; }
+    public int textureWidth { get; init; }
+    public int textureHeight { get; init; }
+    public System.IntPtr texture { get; init; }
 }
 
 public static class NativeStateManager
