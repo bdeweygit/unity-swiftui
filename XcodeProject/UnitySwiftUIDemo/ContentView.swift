@@ -25,6 +25,7 @@ fileprivate enum LoadingState {
 }
 
 struct ContentView: View {
+    @State private var visible = true
     @State private var scale: Float = 1
     @State private var playerDisplay = 0 // TODO: replace with an enum
     @State private var miniplayerDisplay = 0 // TODO: replace with an enum
@@ -39,12 +40,12 @@ struct ContentView: View {
         case .checkerboard: checkerboard
         }
 
-        let textureWidth = Int32(texture?.width ?? 0)
-        let textureHeight = Int32(texture?.height ?? 0)
+        let textureWidth = CInt(texture?.width ?? 0)
+        let textureHeight = CInt(texture?.height ?? 0)
         let unmanagedTexture = texture.flatMap({ Unmanaged.passUnretained($0) })
 
-        var nativeState = NativeState(scale: scale, textureWidth: textureWidth, textureHeight: textureHeight, texture: unmanagedTexture)
-        Unity.shared.setNativeState?(&nativeState)
+        let nativeState = NativeState(scale: scale, visible: visible, textureWidth: textureWidth, textureHeight: textureHeight, texture: unmanagedTexture)
+        Unity.shared.setNativeState?(nativeState)
     }
 
     var body: some View {
@@ -123,11 +124,16 @@ struct ContentView: View {
                             Text("Marble").tag(Texture.marble)
                             Text("Checkerboard").tag(Texture.checkerboard)
                         }).pickerStyle(.segmented)
+                        Picker("Visible", selection: $visible, content: {
+                            Text("Show").tag(true)
+                            Text("Hide").tag(false)
+                        }).pickerStyle(.segmented)
                     }).padding()
                 })
             })
             .onChange(of: scale, sendStateToUnity)
             .onChange(of: texture, sendStateToUnity)
+            .onChange(of: visible, sendStateToUnity)
         }
     }
 }
@@ -141,7 +147,7 @@ extension URL {
 }
 
 /* Make alignment hashable so it can be used as a
-   Picker selection. We only care about top, center, and bottom. */
+   picker selection. We only care about top, center, and bottom. */
 extension Alignment: Hashable {
     public func hash(into hasher: inout Hasher) {
         switch self {

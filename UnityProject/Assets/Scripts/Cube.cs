@@ -7,6 +7,7 @@ public class Cube : MonoBehaviour
         NativeState state = NativeStateManager.State;
 
         // Compute next state
+        bool nextEnabled = state.visible;
         Vector3 nextLocalScale = new Vector3(state.scale, state.scale, state.scale);
         Texture2D nextMainTexture = null;
         if (state.texture != System.IntPtr.Zero) {
@@ -17,6 +18,7 @@ public class Cube : MonoBehaviour
         }
 
         // Update state
+        GetComponent<Renderer>().enabled = nextEnabled;
         transform.localScale = nextLocalScale;
         GetComponent<Renderer>().material.mainTexture = nextMainTexture;
     }

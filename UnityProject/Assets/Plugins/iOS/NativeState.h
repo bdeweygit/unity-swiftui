@@ -2,12 +2,13 @@
 
 struct NativeState {
     float scale;
+    bool visible;
     int textureWidth;
     int textureHeight;
     __unsafe_unretained id<MTLTexture> _Nullable texture;
 };
 
-typedef void (*SetNativeStateCallback)(const struct NativeState* _Nonnull nextState);
+typedef void (*SetNativeStateCallback)(const struct NativeState nextState);
 
 @protocol SetsNativeState
 /* This is the critical function pointer that will be used to send state from Swift to Unity.

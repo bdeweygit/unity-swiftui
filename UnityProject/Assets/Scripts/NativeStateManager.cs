@@ -12,6 +12,7 @@ namespace System.Runtime.CompilerServices
 public readonly struct NativeState
 {
     public float scale { get; init; }
+    public bool visible { get; init; }
     public int textureWidth { get; init; }
     public int textureHeight { get; init; }
     public System.IntPtr texture { get; init; }
@@ -22,7 +23,7 @@ public static class NativeStateManager
     public static NativeState State { get; private set; }
 
     // Should match the SetNativeStateCallback typedef in Plugins/iOS/NativeState.h
-    private delegate void SetNativeStateCallback(in NativeState nextState);
+    private delegate void SetNativeStateCallback(NativeState nextState);
 
     /* Imported from Plugins/iOS/NativeState.m to pass an instance of
        SetNativeStateCallback to C. See section on using delegates: docs.unity3d.com/Manual/PluginsForIOS.html */
@@ -32,7 +33,7 @@ public static class NativeStateManager
     /* Reverse P/Invoke wrapped method to set the state value. iOS is an AOT platform hence the decorator.
        See section on calling managed methods from native code: docs.unity3d.com/Manual/ScriptingRestrictions.html */
     [AOT.MonoPInvokeCallback(typeof(SetNativeStateCallback))]
-    private static void SetState(in NativeState nextState) { State = nextState; }
+    private static void SetState(NativeState nextState) { State = nextState; }
 
     static NativeStateManager()
     {

@@ -53,8 +53,8 @@ class Unity: SetsNativeState {
                 /* We can now send state to Unity. We should assume
                    Unity needs it immediately, so send the current state now. */
                 // TODO: ContentView state bindings?
-                var nativeState = NativeState(scale: 1, textureWidth: 0, textureHeight: 0, texture: nil)
-                setNativeState(&nativeState)
+                let nativeState = NativeState(scale: 1, visible: true, textureWidth: 0, textureHeight: 0, texture: nil)
+                setNativeState(nativeState)
             }
         }
     }
