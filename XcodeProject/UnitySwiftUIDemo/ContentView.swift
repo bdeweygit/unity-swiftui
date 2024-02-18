@@ -23,6 +23,11 @@ fileprivate enum LoadingState {
     case loading
     case loaded
 }
+fileprivate enum LightTemperature: String {
+    case neutral = "#ffffff"
+    case warm = "#ff9100"
+    case cool = "#7dcfff"
+}
 
 struct ContentView: View {
     @State private var visible = true
@@ -32,6 +37,7 @@ struct ContentView: View {
     @State private var texture = Texture.none
     @State private var progress = LoadingState.unloaded
     @State private var miniplayerAlignment = Alignment.top
+    @State private var spotlight = LightTemperature.neutral
 
     private func sendStateToUnity() {
         let texture: MTLTexture? = switch self.texture {
@@ -43,9 +49,10 @@ struct ContentView: View {
         let textureWidth = CInt(texture?.width ?? 0)
         let textureHeight = CInt(texture?.height ?? 0)
         let unmanagedTexture = texture.flatMap({ Unmanaged.passUnretained($0) })
-
-        let nativeState = NativeState(scale: scale, visible: visible, textureWidth: textureWidth, textureHeight: textureHeight, texture: unmanagedTexture)
-        Unity.shared.setNativeState?(nativeState)
+        self.spotlight.rawValue.withCString({ spotlight in
+            let nativeState = NativeState(scale: scale, visible: visible, spotlight: spotlight, textureWidth: textureWidth, textureHeight: textureHeight, texture: unmanagedTexture)
+            Unity.shared.setNativeState?(nativeState)
+        })
     }
 
     var body: some View {
@@ -120,9 +127,14 @@ struct ContentView: View {
                             Slider(value: $scale, in: 1...3)
                         })
                         Picker("Texture", selection: $texture, content: {
-                            Text("None").tag(Texture.none)
+                            Text("Default").tag(Texture.none)
                             Text("Marble").tag(Texture.marble)
                             Text("Checkerboard").tag(Texture.checkerboard)
+                        }).pickerStyle(.segmented)
+                        Picker("Spotlight", selection: $spotlight, content: {
+                            Text("Neutral").tag(LightTemperature.neutral)
+                            Text("Warm").tag(LightTemperature.warm)
+                            Text("Cool").tag(LightTemperature.cool)
                         }).pickerStyle(.segmented)
                         Picker("Visible", selection: $visible, content: {
                             Text("Show").tag(true)
@@ -134,6 +146,7 @@ struct ContentView: View {
             .onChange(of: scale, sendStateToUnity)
             .onChange(of: texture, sendStateToUnity)
             .onChange(of: visible, sendStateToUnity)
+            .onChange(of: spotlight, sendStateToUnity)
         }
     }
 }

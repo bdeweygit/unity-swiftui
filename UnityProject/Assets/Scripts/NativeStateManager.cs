@@ -13,6 +13,7 @@ public readonly struct NativeState
 {
     public float scale { get; init; }
     public bool visible { get; init; }
+    public string spotlight { get; init; }
     public int textureWidth { get; init; }
     public int textureHeight { get; init; }
     public System.IntPtr texture { get; init; }

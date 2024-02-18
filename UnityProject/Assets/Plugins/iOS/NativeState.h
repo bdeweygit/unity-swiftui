@@ -3,6 +3,7 @@
 struct NativeState {
     float scale;
     bool visible;
+    const char* _Nonnull spotlight;
     int textureWidth;
     int textureHeight;
     __unsafe_unretained id<MTLTexture> _Nullable texture;

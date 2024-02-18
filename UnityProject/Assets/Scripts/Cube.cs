@@ -9,6 +9,8 @@ public class Cube : MonoBehaviour
         // Compute next state
         bool nextEnabled = state.visible;
         Vector3 nextLocalScale = new Vector3(state.scale, state.scale, state.scale);
+        Color nextColor;
+        ColorUtility.TryParseHtmlString(state.spotlight, out nextColor);
         Texture2D nextMainTexture = null;
         if (state.texture != System.IntPtr.Zero) {
             /* In practice it looks like our values for width and height are ignored.
@@ -20,6 +22,7 @@ public class Cube : MonoBehaviour
         // Update state
         GetComponent<Renderer>().enabled = nextEnabled;
         transform.localScale = nextLocalScale;
+        GameObject.Find("Spotlight").GetComponent<Light>().color = nextColor;
         GetComponent<Renderer>().material.mainTexture = nextMainTexture;
     }
 }
