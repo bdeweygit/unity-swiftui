@@ -9,7 +9,7 @@ struct NativeState {
     const __unsafe_unretained id<MTLTexture> _Nullable texture;
 };
 
-typedef void (*SetNativeStateCallback)(const struct NativeState nextState);
+typedef void (*SetNativeStateCallback)(struct NativeState nextState);
 
 @protocol SetsNativeState
 /* This is the critical function pointer that will be used to send state from Swift to Unity.
