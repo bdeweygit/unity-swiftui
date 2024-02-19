@@ -1,12 +1,12 @@
 #import <Metal/MTLTexture.h>
 
 struct NativeState {
-    float scale;
-    bool visible;
+    const float scale;
+    const bool visible;
     const char* _Nonnull spotlight;
-    int textureWidth;
-    int textureHeight;
-    __unsafe_unretained id<MTLTexture> _Nullable texture;
+    const int textureWidth;
+    const int textureHeight;
+    const __unsafe_unretained id<MTLTexture> _Nullable texture;
 };
 
 typedef void (*SetNativeStateCallback)(const struct NativeState nextState);
