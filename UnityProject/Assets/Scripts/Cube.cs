@@ -24,5 +24,13 @@ public class Cube : MonoBehaviour
         transform.localScale = nextLocalScale;
         GameObject.Find("Spotlight").GetComponent<Light>().color = nextColor;
         GetComponent<Renderer>().material.mainTexture = nextMainTexture;
+
+        // Respond to single touches only
+        if (Input.touchCount == 1)
+        {
+            // Rotate in the same direction as the touch delta
+            Vector2 delta = Input.GetTouch(0).deltaPosition * 0.1f;
+            transform.Rotate(delta.y, -delta.x, 0, Space.World);
+        }
     }
 }
