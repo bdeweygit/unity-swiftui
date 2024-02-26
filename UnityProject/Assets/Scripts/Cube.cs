@@ -1,13 +1,17 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Cube : MonoBehaviour
 {
+    public Canvas canvas;
+    public Sprite sprite;
+    private GameObject touchIndicator;
+
     void Update()
     {
         NativeState state = NativeStateManager.State;
 
         // Compute next state
-        bool nextEnabled = state.visible;
         Vector3 nextLocalScale = new Vector3(state.scale, state.scale, state.scale);
         Color nextColor;
         ColorUtility.TryParseHtmlString(state.spotlight, out nextColor);
@@ -20,17 +24,46 @@ public class Cube : MonoBehaviour
         }
 
         // Update state
-        GetComponent<Renderer>().enabled = nextEnabled;
+        GetComponent<Renderer>().enabled = state.visible;
         transform.localScale = nextLocalScale;
         GameObject.Find("Spotlight").GetComponent<Light>().color = nextColor;
         GetComponent<Renderer>().material.mainTexture = nextMainTexture;
 
-        // Respond to single touches only
-        if (Input.touchCount == 1)
+        if (Input.touchCount > 0)
         {
-            // Rotate in the same direction as the touch delta
-            Vector2 delta = Input.GetTouch(0).deltaPosition * 0.1f;
-            transform.Rotate(delta.y, -delta.x, 0, Space.World);
+            Touch touch = Input.GetTouch(0);
+
+            if (state.visible)
+            {
+                Vector2 delta = touch.deltaPosition * 0.1f;
+                transform.Rotate(delta.y, -delta.x, 0, Space.World);
+            }
+
+            if (touchIndicator == null)
+            {
+                touchIndicator = new GameObject("TouchIndicator");
+                touchIndicator.AddComponent<Image>().sprite = sprite;
+                touchIndicator.transform.SetParent(canvas.transform);
+            }
+
+            touchIndicator.transform.position = touch.position;
+
+            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+            {
+                Image image = touchIndicator.GetComponent<Image>();
+                StartCoroutine(FadeDestroy(image));
+                touchIndicator = null;
+            }
         }
+    }
+
+    private System.Collections.IEnumerator FadeDestroy(Image image)
+    {
+        while (image.color.a > 0)
+        {
+            image.color -= new Color(0, 0, 0, Time.deltaTime);
+            yield return null;
+        }
+        Destroy(image.gameObject);
     }
 }
