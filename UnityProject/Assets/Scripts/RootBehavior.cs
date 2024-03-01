@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Cube : MonoBehaviour
+public class RootBehavior : MonoBehaviour
 {
     public Canvas canvas;
     public Sprite sprite;
+    public Light spotlight;
+    public GameObject cube;
     private GameObject touchIndicator;
 
     void Update()
@@ -24,10 +26,10 @@ public class Cube : MonoBehaviour
         }
 
         // Update state
-        GetComponent<Renderer>().enabled = state.visible;
-        transform.localScale = nextLocalScale;
-        GameObject.Find("Spotlight").GetComponent<Light>().color = nextColor;
-        GetComponent<Renderer>().material.mainTexture = nextMainTexture;
+        cube.GetComponent<Renderer>().enabled = state.visible;
+        cube.transform.localScale = nextLocalScale;
+        spotlight.color = nextColor;
+        cube.GetComponent<Renderer>().material.mainTexture = nextMainTexture;
 
         if (Input.touchCount > 0)
         {
@@ -35,21 +37,25 @@ public class Cube : MonoBehaviour
 
             if (state.visible)
             {
+                // Rotate in the same direciton as the touch delta
                 Vector2 delta = touch.deltaPosition * 0.1f;
-                transform.Rotate(delta.y, -delta.x, 0, Space.World);
+                cube.transform.Rotate(delta.y, -delta.x, 0, Space.World);
             }
 
-            if (touchIndicator == null)
+            if (touchIndicator is null)
             {
-                touchIndicator = new GameObject("TouchIndicator");
+                // Create a touch indicator
+                touchIndicator = new GameObject("Touch Indicator");
                 touchIndicator.AddComponent<Image>().sprite = sprite;
                 touchIndicator.transform.SetParent(canvas.transform);
             }
 
+            // Update touch indicator position
             touchIndicator.transform.position = touch.position;
 
             if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
             {
+                // Fade out touch indicator
                 Image image = touchIndicator.GetComponent<Image>();
                 StartCoroutine(FadeDestroy(image));
                 touchIndicator = null;
@@ -64,6 +70,7 @@ public class Cube : MonoBehaviour
             image.color -= new Color(0, 0, 0, Time.deltaTime);
             yield return null;
         }
+
         Destroy(image.gameObject);
     }
 }
