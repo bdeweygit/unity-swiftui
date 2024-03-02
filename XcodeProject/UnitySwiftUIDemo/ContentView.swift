@@ -9,14 +9,22 @@ import SwiftUI
 import MetalKit
 import UnityFramework
 
-fileprivate var marble: MTLTexture!
-fileprivate var checkerboard: MTLTexture!
+fileprivate var marbleTexture: MTLTexture!
+fileprivate var checkerboardTexture: MTLTexture!
 fileprivate var UnityContainer: UIViewContainer!
 
 fileprivate enum Texture {
     case none
     case marble
     case checkerboard
+
+    var instance: MTLTexture? {
+        return switch self {
+        case .none: nil
+        case .marble: marbleTexture!
+        case .checkerboard: checkerboardTexture!
+        }
+    }
 }
 fileprivate enum LoadingState {
     case unloaded
@@ -40,12 +48,7 @@ struct ContentView: View {
     @State private var spotlight = LightTemperature.neutral
 
     private func sendStateToUnity() {
-        let texture: MTLTexture? = switch self.texture {
-        case .none: nil
-        case .marble: marble
-        case .checkerboard: checkerboard
-        }
-
+        let texture = self.texture.instance
         let textureWidth = CInt(texture?.width ?? 0)
         let textureHeight = CInt(texture?.height ?? 0)
         let unmanagedTexture = texture.flatMap({ Unmanaged.passUnretained($0) })
@@ -72,10 +75,10 @@ struct ContentView: View {
                 // Load textures concurrently.
                 let concurrentQueue = DispatchQueue.global(qos: .userInitiated)
                 concurrentQueue.async(group: loadingGroup, execute: {
-                    marble = Bundle.main.url(forResource: "marble", withExtension: "jpg")!.loadTexture()
+                    marbleTexture = Bundle.main.url(forResource: "marble", withExtension: "jpg")!.loadTexture()
                 })
                 concurrentQueue.async(group: loadingGroup, execute: {
-                    checkerboard = Bundle.main.url(forResource: "checkerboard", withExtension: "png")!.loadTexture()
+                    checkerboardTexture = Bundle.main.url(forResource: "checkerboard", withExtension: "png")!.loadTexture()
                 })
 
                 progress = .loading
@@ -170,8 +173,4 @@ extension Alignment: Hashable {
         default: hasher.combine(3)
         }
     }
-}
-
-#Preview {
-    ContentView()
 }

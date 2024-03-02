@@ -16,7 +16,3 @@ struct UIViewContainer: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIView, context: Context) {}
 }
-
-#Preview {
-    UIViewContainer(containee: UIView(frame: .zero))
-}
