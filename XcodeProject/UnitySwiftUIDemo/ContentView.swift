@@ -13,6 +13,24 @@ fileprivate var marbleTexture: MTLTexture!
 fileprivate var checkerboardTexture: MTLTexture!
 fileprivate var UnityContainer: UIViewContainer!
 
+fileprivate enum LoadingState {
+    case unloaded
+    case loading
+    case loaded
+}
+fileprivate enum Display {
+    case fullscreen
+    case safearea
+    case aspect
+    case square
+
+    var isMiniplayer: Bool {
+        return switch self {
+        case .aspect, .square: true
+        default: false
+        }
+    }
+}
 fileprivate enum Texture {
     case none
     case marble
@@ -26,11 +44,6 @@ fileprivate enum Texture {
         }
     }
 }
-fileprivate enum LoadingState {
-    case unloaded
-    case loading
-    case loaded
-}
 fileprivate enum LightTemperature: String {
     case neutral = "#ffffff"
     case warm = "#ff9100"
@@ -38,12 +51,12 @@ fileprivate enum LightTemperature: String {
 }
 
 struct ContentView: View {
+    private let miniplayerScale = 0.5
     @State private var visible = true
     @State private var scale: Float = 1
-    @State private var playerDisplay = 0 // TODO: replace with an enum
-    @State private var miniplayerDisplay = 0 // TODO: replace with an enum
     @State private var texture = Texture.none
     @State private var progress = LoadingState.unloaded
+    @State private var playerDisplay = Display.fullscreen
     @State private var miniplayerAlignment = Alignment.top
     @State private var spotlight = LightTemperature.neutral
 
@@ -63,11 +76,12 @@ struct ContentView: View {
         case .unloaded:
             Button("Start Unity", action: {
                 // We have multiple things to load.
+                progress = .loading
                 let loadingGroup = DispatchGroup()
 
                 /* Create a container view for Unity's UIView. This will cause
-                   Unity to load which must occur on the main thread. Use async so
-                   we can update progress and re-render before the UI becomes unresponsive. */
+                   Unity to load which must occur on the main thread. Use async so we
+                   can re-render with updated progress before the UI becomes unresponsive. */
                 DispatchQueue.main.async(group: loadingGroup, execute: {
                     UnityContainer = UIViewContainer(containee: Unity.shared.view)
                 })
@@ -81,7 +95,6 @@ struct ContentView: View {
                     checkerboardTexture = Bundle.main.url(forResource: "checkerboard", withExtension: "png")!.loadTexture()
                 })
 
-                progress = .loading
                 loadingGroup.notify(queue: .main, execute: { progress = .loaded })
             }).buttonStyle(.borderedProminent)
         case .loading:
@@ -91,38 +104,33 @@ struct ContentView: View {
                 ZStack(content: {
                     ZStack(alignment: miniplayerAlignment, content: {
                         Color.clear
-                        if playerDisplay == 0 { // Fullscreen
+                        let width = geometry.size.width * miniplayerScale
+                        let height = geometry.size.height * miniplayerScale
+                        switch playerDisplay {
+                        case .fullscreen:
                             UnityContainer.ignoresSafeArea()
-                        } else if playerDisplay == 1 { // Safe area
+                        case .safearea:
                             UnityContainer
-                        } else { // Miniplayer
-                            let scale = 0.5
-                            let width = geometry.size.width * scale
-                            let height = geometry.size.height * scale
-                            if miniplayerDisplay == 0 { // Square
-                                let length = min(width, height)
-                                UnityContainer.frame(width: length, height: length)
-                            } else { // Aspect
-                                UnityContainer.frame(width: width, height: height)
-                            }
+                        case .aspect:
+                            UnityContainer.frame(width: width, height: height)
+                        case .square:
+                            let length = min(width, height)
+                            UnityContainer.frame(width: length, height: length)
                         }
                     })
                     VStack(content: {
                         Spacer()
                         Picker("Player display", selection: $playerDisplay, content: {
-                            Text("Fullscreen").tag(0)
-                            Text("Safe area").tag(1)
-                            Text("Miniplayer").tag(2)
+                            Text("Fullscreen").tag(Display.fullscreen)
+                            Text("Safe area").tag(Display.safearea)
+                            Text("Aspect").tag(Display.aspect)
+                            Text("Square").tag(Display.square)
                         }).pickerStyle(.segmented)
-                        if playerDisplay == 2 { // Miniplayer
+                        if playerDisplay.isMiniplayer {
                             Picker("Miniplayer alignment", selection: $miniplayerAlignment, content: {
                                 Text("Top").tag(Alignment.top)
                                 Text("Center").tag(Alignment.center)
                                 Text("Bottom").tag(Alignment.bottom)
-                            }).pickerStyle(.segmented)
-                            Picker("Miniplayer display", selection: $miniplayerDisplay, content: {
-                                Text("Square").tag(0)
-                                Text("Aspect").tag(1)
                             }).pickerStyle(.segmented)
                         }
                         HStack(content: {
@@ -150,15 +158,8 @@ struct ContentView: View {
             .onChange(of: texture, sendStateToUnity)
             .onChange(of: visible, sendStateToUnity)
             .onChange(of: spotlight, sendStateToUnity)
+            // TODO: Find DRYer way to receive state updates
         }
-    }
-}
-
-extension URL {
-    func loadTexture() -> MTLTexture {
-        let device = MTLCreateSystemDefaultDevice()!
-        let loader = MTKTextureLoader(device: device)
-        return try! loader.newTexture(URL: self)
     }
 }
 
@@ -172,5 +173,13 @@ extension Alignment: Hashable {
         case .bottom: hasher.combine(2)
         default: hasher.combine(3)
         }
+    }
+}
+
+extension URL {
+    func loadTexture() -> MTLTexture {
+        let device = MTLCreateSystemDefaultDevice()!
+        let loader = MTKTextureLoader(device: device)
+        return try! loader.newTexture(URL: self)
     }
 }
