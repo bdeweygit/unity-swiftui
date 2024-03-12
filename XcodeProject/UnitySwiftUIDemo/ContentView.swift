@@ -9,9 +9,14 @@ import SwiftUI
 import MetalKit
 import UnityFramework
 
+// MARK: Loadables
+
+// These values must exist when accessed
 fileprivate var marbleTexture: MTLTexture!
 fileprivate var checkerboardTexture: MTLTexture!
 fileprivate var UnityContainer: UIViewContainer!
+
+// MARK: Enums
 
 fileprivate enum LoadingState {
     case unloaded
@@ -23,6 +28,11 @@ fileprivate enum Display {
     case safearea
     case aspect
     case square
+}
+fileprivate enum LightTemperature: String {
+    case neutral = "#ffffff"
+    case warm = "#ff9100"
+    case cool = "#7dcfff"
 }
 fileprivate enum Texture {
     case none
@@ -37,13 +47,10 @@ fileprivate enum Texture {
         }
     }
 }
-fileprivate enum LightTemperature: String {
-    case neutral = "#ffffff"
-    case warm = "#ff9100"
-    case cool = "#7dcfff"
-}
 
-struct CustomButtonStyle: PrimitiveButtonStyle {
+// MARK: Styles
+
+fileprivate struct CustomButtonStyle: PrimitiveButtonStyle {
     static let color = Color(.darkGray)
     static let shape = RoundedRectangle(cornerRadius: 6)
     func makeBody(configuration: Configuration) -> some View {
@@ -51,14 +58,17 @@ struct CustomButtonStyle: PrimitiveButtonStyle {
     }
 }
 
+// MARK: View
+
 struct ContentView: View {
+    // UI state
     @State private var showState = false
     @State private var showLayout = false
     @State private var progress = LoadingState.unloaded
     @State private var playerDisplay = Display.fullscreen
     @State private var miniplayerAlignment = Alignment.top
 
-    // State that is sent to Unity
+    // Unity state
     @State private var visible = true
     @State private var scale: Float = 1
     @State private var texture = Texture.none
@@ -80,7 +90,7 @@ struct ContentView: View {
             switch progress {
             case .unloaded:
                 Button("Start Unity", systemImage: "play", action: {
-                    // We have multiple things to load.
+                    // We have multiple things to load
                     progress = .loading
                     let loadingGroup = DispatchGroup()
 
@@ -91,7 +101,7 @@ struct ContentView: View {
                         UnityContainer = UIViewContainer(containee: Unity.shared.view)
                     })
 
-                    // Load textures concurrently.
+                    // Load textures concurrently
                     let concurrentQueue = DispatchQueue.global(qos: .userInitiated)
                     concurrentQueue.async(group: loadingGroup, execute: {
                         marbleTexture = Bundle.main.url(forResource: "marble", withExtension: "jpg")!.loadTexture()
@@ -182,6 +192,8 @@ struct ContentView: View {
         // TODO: Find DRYer way to receive state updates
     }
 }
+
+// MARK: Extensions
 
 /* Make alignment hashable so it can be used as a
    picker selection. We only care about top, center, and bottom. */
