@@ -90,27 +90,29 @@ struct ContentView: View {
             switch progress {
             case .unloaded:
                 Button("Start Unity", systemImage: "play", action: {
-                    // We have multiple things to load
+                    /* We have multiple things to load. Use async dispatch so we can
+                       re-render with updated progress before the UI becomes unresponsive. */
                     progress = .loading
-                    let loadingGroup = DispatchGroup()
-
-                    /* Create a container view for Unity's UIView. This will cause
-                       Unity to load which must occur on the main thread. Use async so we
-                       can re-render with updated progress before the UI becomes unresponsive. */
-                    DispatchQueue.main.async(group: loadingGroup, execute: {
-                        UnityContainer = UIViewContainer(containee: Unity.shared.view)
-                    })
 
                     // Load textures concurrently
-                    let concurrentQueue = DispatchQueue.global(qos: .userInitiated)
-                    concurrentQueue.async(group: loadingGroup, execute: {
-                        marbleTexture = Bundle.main.url(forResource: "marble", withExtension: "jpg")!.loadTexture()
+                    let textureLoadingGroup = DispatchGroup()
+                    let concurrentQueue = DispatchQueue.global()
+                    concurrentQueue.async(group: textureLoadingGroup, execute: {
+                        let url = Bundle.main.url(forResource: "marble", withExtension: "jpg")!
+                        marbleTexture = url.loadTexture()
                     })
-                    concurrentQueue.async(group: loadingGroup, execute: {
-                        checkerboardTexture = Bundle.main.url(forResource: "checkerboard", withExtension: "png")!.loadTexture()
+                    concurrentQueue.async(group: textureLoadingGroup, execute: {
+                        let url = Bundle.main.url(forResource: "checkerboard", withExtension: "png")!
+                        checkerboardTexture = url.loadTexture()
                     })
 
-                    loadingGroup.notify(queue: .main, execute: { progress = .loaded })
+                    /* Load Unity when textures are done. Accessing the Unity
+                       singleton will cause it to load. This must occur on the main thread. */
+                    textureLoadingGroup.notify(queue: .main, execute: {
+                        // Create a container for Unity's UIView
+                        UnityContainer = UIViewContainer(containee: Unity.shared.view)
+                        progress = .loaded
+                    })
                 })
             case .loading:
                 ProgressView("Loading...").tint(.white).foregroundStyle(.white)
