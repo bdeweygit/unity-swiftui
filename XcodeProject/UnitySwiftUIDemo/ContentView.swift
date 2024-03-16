@@ -24,10 +24,10 @@ fileprivate enum LoadingState {
     case loaded
 }
 fileprivate enum Display {
-    case fullscreen
-    case safearea
-    case aspect
     case square
+    case aspect
+    case safearea
+    case fullscreen
 }
 fileprivate enum LightTemperature: String {
     case neutral = "#ffffff"
@@ -64,9 +64,9 @@ struct ContentView: View {
     // UI state
     @State private var showState = false
     @State private var showLayout = false
+    @State private var playerDisplay = Display.square
+    @State private var playerAlignment = Alignment.top
     @State private var progress = LoadingState.unloaded
-    @State private var playerDisplay = Display.fullscreen
-    @State private var miniplayerAlignment = Alignment.top
 
     // Unity state
     @State private var visible = true
@@ -127,7 +127,7 @@ struct ContentView: View {
                         let square = min(aspect.width, aspect.height)
                         let width = isAspect ? aspect.width : square
                         let height = isAspect ? aspect.height : square
-                        UnityContainer.frame(width: width, height: height).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: miniplayerAlignment)
+                        UnityContainer.frame(width: width, height: height).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: playerAlignment)
                     })
                 }
                 VStack(alignment: .leading, content: {
@@ -155,13 +155,13 @@ struct ContentView: View {
                             }
                             if showLayout {
                                 Picker("Player display", selection: $playerDisplay, content: {
-                                    Text("Fullscreen").tag(Display.fullscreen)
-                                    Text("Safe area").tag(Display.safearea)
-                                    Text("Aspect").tag(Display.aspect)
                                     Text("Square").tag(Display.square)
+                                    Text("Aspect").tag(Display.aspect)
+                                    Text("Safe area").tag(Display.safearea)
+                                    Text("Fullscreen").tag(Display.fullscreen)
                                 })
                                 if playerDisplay == .aspect || playerDisplay == .square {
-                                    Picker("Miniplayer alignment", selection: $miniplayerAlignment, content: {
+                                    Picker("Player alignment", selection: $playerAlignment, content: {
                                         Text("Top").tag(Alignment.top)
                                         Text("Center").tag(Alignment.center)
                                         Text("Bottom").tag(Alignment.bottom)
