@@ -32,7 +32,7 @@ class Unity: SetsNativeState, ObservableObject  {
         // Set bundle containing framework's data folder
         framework.setDataBundleId("com.unity3d.framework")
 
-        /* Register as the native state setter. Note we have disabled the
+        /* Register as the native state setter. We have disabled the
            Thread Performance Checker in the UnitySwiftUIDemo scheme or else the mere
            presence of this line will instigate a crash before our code executes when
            running from Xcode. The Unity-iPhone scheme also has the Thread Performance
@@ -54,6 +54,30 @@ class Unity: SetsNativeState, ObservableObject  {
         })
         loadingGroup.wait()
 
+        /* The player finishes starting - runEmbedded() returns - before completing
+           its first render. If the view is displayed immediately it often shows the
+           content leftover from the previous run until Unity renders again and overwrites it.
+           Clearing Unity's content with transparent color before restart hides this brief artifact. */
+        if let layer = framework.appController()?.rootView?.layer as? CAMetalLayer, let drawable = layer.nextDrawable(), let buffer = MTLCreateSystemDefaultDevice()?.makeCommandQueue()?.makeCommandBuffer() {
+            let descriptor = MTLRenderPassDescriptor()
+            descriptor.colorAttachments[0].loadAction = .clear
+            descriptor.colorAttachments[0].storeAction = .store
+            descriptor.colorAttachments[0].texture = drawable.texture
+            descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 0)
+            /* Unity does not render an alpha value by default; transparent is written
+               as opaque. To fix this we have enabled "Render Over Native UI" in the Unity
+               project player settings. This is an alias for the preserveFramebufferAlpha scripting
+               property: docs.unity3d.com/ScriptReference/PlayerSettings-preserveFramebufferAlpha.html */
+
+            if let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor) {
+                encoder.label = "Unity Prestart Clear"
+                encoder.endEncoding()
+                buffer.present(drawable)
+                buffer.commit()
+                buffer.waitUntilCompleted()
+            }
+        }
+
         // Start the player
         framework.runEmbedded(withArgc: CommandLine.argc, argv: CommandLine.unsafeArgv, appLaunchOpts: nil)
 
@@ -66,6 +90,11 @@ class Unity: SetsNativeState, ObservableObject  {
     func stop() {
         // docs.unity3d.com/ScriptReference/Application.Unload.html
         framework.unloadApplication()
+
+        /* We could unload native state textures here too, but on restart
+           we will have to ensure Unity does not have any texture reference else reading
+           will result in a null pointer exception. For now we will leave the memory as allocated. */
+
         loaded = false
     }
 
