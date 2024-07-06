@@ -1,38 +1,42 @@
-using UnityEngine;
 using UnityEditor;
-using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
 
 public class PostProcessBuild
 {
-    [PostProcessBuildAttribute]
+    [UnityEditor.Callbacks.PostProcessBuildAttribute]
     public static void OnPostprocessBuild(BuildTarget target, string buildPath)
     {
+        /* Edit iOS project to enable Unity as a library:
+           github.com/Unity-Technologies/uaal-example/blob/master/docs/ios.md */
         if (target == BuildTarget.iOS)
         {
-            string pbxPath = PBXProject.GetPBXProjectPath(buildPath);
-            PBXProject pbx = new PBXProject();
-            pbx.ReadFromFile(pbxPath);
+            // Read project
+            string projectPath = PBXProject.GetPBXProjectPath(buildPath);
+            PBXProject project = new PBXProject();
+            project.ReadFromFile(projectPath);
 
-            string dataDirectoryXcodePath = "Data";
-            string pluginHeaderXcodePath = "Libraries/Plugins/iOS/NativeState.h";
-            string modulemapXcodePath = "UnityFramework/UnityFramework.modulemap";
-            string modulemapUnityPath = "Assets/Plugins/iOS/UnityFramework.modulemap";
-            string modulemapDestinationPath = $"{buildPath}/{modulemapXcodePath}";
-            string modulemapBuildPropertyName = "MODULEMAP_FILE";
-            string unityMainTargetGuid = pbx.GetUnityMainTargetGuid();
-            string unityFrameworkTargetGuid = pbx.GetUnityFrameworkTargetGuid();
-            string dataDirectoryGuid = pbx.FindFileGuidByProjectPath(dataDirectoryXcodePath);
-            string pluginHeaderGuid = pbx.FindFileGuidByProjectPath(pluginHeaderXcodePath);
+            // Get main and framework target guids
+            string unityMainTargetGuid = project.GetUnityMainTargetGuid();
+            string unityFrameworkTargetGuid = project.GetUnityFrameworkTargetGuid();
 
-            FileUtil.CopyFileOrDirectory(modulemapUnityPath, modulemapDestinationPath);
-            pbx.AddFile(modulemapDestinationPath, modulemapXcodePath);
-            pbx.AddBuildProperty(unityFrameworkTargetGuid, modulemapBuildPropertyName, modulemapXcodePath);
-            pbx.RemoveFileFromBuild(unityMainTargetGuid, dataDirectoryGuid);
-            pbx.AddFileToBuild(unityFrameworkTargetGuid, dataDirectoryGuid);
-            pbx.AddPublicHeaderToBuild(unityFrameworkTargetGuid, pluginHeaderGuid);
+            // Set NativeState plugin header visibility to public
+            string pluginHeaderGuid = project.FindFileGuidByProjectPath("Libraries/Plugins/iOS/NativeState.h");
+            project.AddPublicHeaderToBuild(unityFrameworkTargetGuid, pluginHeaderGuid);
 
-            pbx.WriteToFile(pbxPath);
+            // Change data directory target membership to framework only
+            string dataDirectoryGuid = project.FindFileGuidByProjectPath("Data");
+            project.RemoveFileFromBuild(unityMainTargetGuid, dataDirectoryGuid);
+            project.AddFileToBuild(unityFrameworkTargetGuid, dataDirectoryGuid);
+
+            // Include modulemap so Swift can import NativeState plugin
+            string modulemapRelativePath = "UnityFramework/UnityFramework.modulemap";
+            string modulemapAbsolutePath = $"{buildPath}/{modulemapRelativePath}";
+            FileUtil.CopyFileOrDirectory("Assets/Plugins/iOS/UnityFramework.modulemap", modulemapAbsolutePath);
+            project.AddFile(modulemapAbsolutePath, modulemapRelativePath);
+            project.AddBuildProperty(unityFrameworkTargetGuid, "MODULEMAP_FILE", modulemapRelativePath);
+
+            // Overwrite project
+            project.WriteToFile(projectPath);
         }
     }
 }
