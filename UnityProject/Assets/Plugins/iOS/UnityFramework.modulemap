@@ -1,9 +1,8 @@
 framework module UnityFramework {
   umbrella header "UnityFramework.h"
-
   export *
-  module * { export * }
 
+  // Declare NativeState plugin as submodule of UnityFramework
   module NativeState {
       header "NativeState.h"
       export *
