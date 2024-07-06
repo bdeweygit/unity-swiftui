@@ -20,8 +20,8 @@ public class RootBehavior : MonoBehaviour
         Texture2D nextMainTexture = null;
         if (state.texture != System.IntPtr.Zero) {
             /* In practice it looks like our values for width and height are ignored.
-               It probably determines correct values from the native MTLTexture's own properties.
-               Documentation still insists that we pass the correct width and height values, so we will.*/
+               It probably determines correct values from native MTLTexture's own properties.
+               Documentation still insists that we pass correct width and height values, so we will. */
             nextMainTexture = Texture2D.CreateExternalTexture(state.textureWidth, state.textureHeight, TextureFormat.BGRA32, false, false, state.texture);
         }
 
@@ -37,14 +37,14 @@ public class RootBehavior : MonoBehaviour
 
             if (state.visible)
             {
-                // Rotate in the same direciton as the touch delta
+                // Rotate in same direciton as touch delta
                 Vector2 delta = touch.deltaPosition * 0.1f;
                 cube.transform.Rotate(delta.y, -delta.x, 0, Space.World);
             }
 
             if (touchIndicator is null)
             {
-                // Create a touch indicator
+                // Create touch indicator
                 touchIndicator = new GameObject("Touch Indicator");
                 touchIndicator.AddComponent<Image>().sprite = sprite;
                 touchIndicator.transform.SetParent(canvas.transform);
