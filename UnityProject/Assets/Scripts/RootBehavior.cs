@@ -31,6 +31,7 @@ public class RootBehavior : MonoBehaviour
         spotlight.color = nextColor;
         cube.GetComponent<Renderer>().material.mainTexture = nextMainTexture;
 
+        // Update cube rotation and touch indicator
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
