@@ -1,8 +1,10 @@
+/* Custom modulemap declaring NativeState plugin as submodule of
+   UnityFramework. This will expose plugin to Swift when importing framework.
+   See Assets/Editor/PostProcessBuild.cs for how this gets added to the Unity Xcode project. */
 framework module UnityFramework {
   umbrella header "UnityFramework.h"
   export *
 
-  // Declare NativeState plugin as submodule of UnityFramework
   module NativeState {
       header "NativeState.h"
       export *

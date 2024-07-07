@@ -6,7 +6,7 @@ public class PostProcessBuild
     [UnityEditor.Callbacks.PostProcessBuildAttribute]
     public static void OnPostprocessBuild(BuildTarget target, string buildPath)
     {
-        /* Edit iOS project to enable Unity as a library:
+        /* Edit Unity Xcode project to enable Unity as a library:
            github.com/Unity-Technologies/uaal-example/blob/master/docs/ios.md */
         if (target == BuildTarget.iOS)
         {
@@ -28,7 +28,7 @@ public class PostProcessBuild
             project.RemoveFileFromBuild(unityMainTargetGuid, dataDirectoryGuid);
             project.AddFileToBuild(unityFrameworkTargetGuid, dataDirectoryGuid);
 
-            // Include modulemap so Swift can import NativeState plugin
+            // Add custom modulemap for NativeState plugin integration with Swift
             string modulemapRelativePath = "UnityFramework/UnityFramework.modulemap";
             string modulemapAbsolutePath = $"{buildPath}/{modulemapRelativePath}";
             FileUtil.CopyFileOrDirectory("Assets/Plugins/iOS/UnityFramework.modulemap", modulemapAbsolutePath);

@@ -5,7 +5,7 @@ namespace System.Runtime.CompilerServices
     internal class IsExternalInit{}
 }
 
-// Should match NativeState struct in Plugins/iOS/NativeState.h
+// Should match NativeState struct in Assets/Plugins/iOS/NativeState.h
 public readonly struct NativeState
 {
     public float scale { get; init; }
@@ -20,7 +20,7 @@ public static class NativeStateManager
 {
     public static NativeState State { get; private set; }
 
-    // Should match SetNativeStateCallback typedef in Plugins/iOS/NativeState.h
+    // Should match SetNativeStateCallback typedef in Assets/Plugins/iOS/NativeState.h
     private delegate void SetNativeStateCallback(NativeState nextState);
 
     /* Imported from Plugins/iOS/NativeState.m to pass instance of
