@@ -28,7 +28,7 @@ public class PostProcessBuild
             project.RemoveFileFromBuild(unityMainTargetGuid, dataDirectoryGuid);
             project.AddFileToBuild(unityFrameworkTargetGuid, dataDirectoryGuid);
 
-            // Add custom modulemap for NativeState plugin integration with Swift
+            // Add custom modulemap for NativeState plugin interop with Swift
             string modulemapRelativePath = "UnityFramework/UnityFramework.modulemap";
             string modulemapAbsolutePath = $"{buildPath}/{modulemapRelativePath}";
             FileUtil.CopyFileOrDirectory("Assets/Plugins/iOS/UnityFramework.modulemap", modulemapAbsolutePath);
