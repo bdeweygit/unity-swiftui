@@ -1,6 +1,6 @@
 //
 //  UIViewContainer.swift
-//  UnitySwiftUIDemo
+//  UnitySwiftUI
 //
 //  Created by Benjamin Dewey on 12/31/23.
 //

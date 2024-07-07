@@ -1,6 +1,6 @@
 //
-//  UnitySwiftUIDemoApp.swift
-//  UnitySwiftUIDemo
+//  UnitySwiftUIApp.swift
+//  UnitySwiftUI
 //
 //  Created by Benjamin Dewey on 12/24/23.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct UnitySwiftUIDemoApp: App {
+struct UnitySwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

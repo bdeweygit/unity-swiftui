@@ -1,6 +1,6 @@
 //
 //  Unity.swift
-//  UnitySwiftUIDemo
+//  UnitySwiftUI
 //
 //  Created by Benjamin Dewey on 12/24/23.
 //
@@ -33,7 +33,7 @@ class Unity: SetsNativeState, ObservableObject  {
         framework.setDataBundleId("com.unity3d.framework")
 
         /* Register as the native state setter. We have disabled the
-           Thread Performance Checker in the UnitySwiftUIDemo scheme or else the mere
+           Thread Performance Checker in the UnitySwiftUI scheme or else the mere
            presence of this line will instigate a crash before our code executes when
            running from Xcode. The Unity-iPhone scheme also has the Thread Performance
            Checker disabled by default, perhaps for the same reason. See forum discussion:

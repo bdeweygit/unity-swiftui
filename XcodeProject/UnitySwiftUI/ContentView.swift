@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  UnitySwiftUIDemo
+//  UnitySwiftUI
 //
 //  Created by Benjamin Dewey on 12/24/23.
 //

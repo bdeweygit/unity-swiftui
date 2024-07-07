@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B57974C62B38D8CC00A28CAF"
-               BuildableName = "UnitySwiftUIDemo.app"
-               BlueprintName = "UnitySwiftUIDemo"
-               ReferencedContainer = "container:UnitySwiftUIDemo.xcodeproj">
+               BuildableName = "UnitySwiftUI.app"
+               BlueprintName = "UnitySwiftUI"
+               ReferencedContainer = "container:UnitySwiftUI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B57974C62B38D8CC00A28CAF"
-            BuildableName = "UnitySwiftUIDemo.app"
-            BlueprintName = "UnitySwiftUIDemo"
-            ReferencedContainer = "container:UnitySwiftUIDemo.xcodeproj">
+            BuildableName = "UnitySwiftUI.app"
+            BlueprintName = "UnitySwiftUI"
+            ReferencedContainer = "container:UnitySwiftUI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B57974C62B38D8CC00A28CAF"
-            BuildableName = "UnitySwiftUIDemo.app"
-            BlueprintName = "UnitySwiftUIDemo"
-            ReferencedContainer = "container:UnitySwiftUIDemo.xcodeproj">
+            BuildableName = "UnitySwiftUI.app"
+            BlueprintName = "UnitySwiftUI"
+            ReferencedContainer = "container:UnitySwiftUI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
