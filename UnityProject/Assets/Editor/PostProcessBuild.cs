@@ -31,7 +31,7 @@ public class PostProcessBuild
             // Add custom modulemap for NativeState plugin interop with Swift
             string modulemapRelativePath = "UnityFramework/UnityFramework.modulemap";
             string modulemapAbsolutePath = $"{buildPath}/{modulemapRelativePath}";
-            FileUtil.CopyFileOrDirectory("Assets/Plugins/iOS/UnityFramework.modulemap", modulemapAbsolutePath);
+            FileUtil.ReplaceFile("Assets/Plugins/iOS/UnityFramework.modulemap", modulemapAbsolutePath);
             project.AddFile(modulemapAbsolutePath, modulemapRelativePath);
             project.AddBuildProperty(unityFrameworkTargetGuid, "MODULEMAP_FILE", modulemapRelativePath);
 
