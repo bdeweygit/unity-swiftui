@@ -62,5 +62,5 @@ This is a _reference project_ for those that want to use [Unity as a Library](ht
 - [**PostProcessBuild.cs**](UnityProject/Assets/Editor/PostProcessBuild.cs): Script automating integration of Unity generated Xcode project.
 
 ## Known issues
-- After building Unity project, Xcode workspace may not always reflect latest files, be unable to build. Close and reopen workspace to refresh it and fix this bad state.
-- When running app while attached to Xcode, there may be some noticeable delay between device orientation change and UI layout. There should be no such delay when running detached.
+- After building Unity project, Xcode workspace may not always reflect latest files and be unable to build. Close and reopen workspace to fix this bad state.
+- When running while attached to Xcode, there may be some noticeable delay between device orientation change and UI layout. There should be no such delay when running detached.
