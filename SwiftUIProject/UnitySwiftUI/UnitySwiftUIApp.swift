@@ -11,7 +11,10 @@ import SwiftUI
 struct UnitySwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ZStack(content: {
+                Color.gray.ignoresSafeArea()
+                ContentView()
+            })
         }
     }
 }
