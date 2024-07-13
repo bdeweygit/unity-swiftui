@@ -11,9 +11,8 @@ public class RootBehavior : MonoBehaviour
 
     void Update()
     {
+        // Create next state
         NativeState state = NativeStateManager.State;
-
-        // Compute next state
         Vector3 nextLocalScale = new Vector3(state.scale, state.scale, state.scale);
         Color nextColor;
         ColorUtility.TryParseHtmlString(state.spotlight, out nextColor);
@@ -25,7 +24,7 @@ public class RootBehavior : MonoBehaviour
             nextMainTexture = Texture2D.CreateExternalTexture(state.textureWidth, state.textureHeight, TextureFormat.BGRA32, false, false, state.texture);
         }
 
-        // Update state
+        // Apply next state
         cube.GetComponent<Renderer>().enabled = state.visible;
         cube.transform.localScale = nextLocalScale;
         spotlight.color = nextColor;
