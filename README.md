@@ -7,7 +7,7 @@ This is a _reference project_ for those that want to use [Unity as a Library](ht
 ## Requirements
 
 - Physical device with iOS 17.5 or later.
-- Unity Editor 2022.3.36f1 - latest LTS at time of this writing - with iOS build support installed in Unity Hub.
+- Unity Editor 2022.3.37f1 - latest LTS as of Jul 9, 2024 - with iOS build support installed in Unity Hub.
 
 ## Instructions
 
@@ -22,7 +22,7 @@ This is a _reference project_ for those that want to use [Unity as a Library](ht
     mkdir -p UnityProject/Builds/iOS
     ```
 
-3. **Open Unity project**
+3. **Open and build Unity project**
     - Use Unity Hub to open `UnityProject` directory.
     - Go to `File > Build Settings`.
     - In platform menu, select `iOS` and click `Switch Platform`.
@@ -35,16 +35,16 @@ This is a _reference project_ for those that want to use [Unity as a Library](ht
     - Edit `UnitySwiftUI` target's signing settings with valid bundle identifier and signing team ID.
     - Switch to `UnitySwiftUI` scheme.
 
-6. **Run app on a physical device**
-    - Connect your physical device to Xcode.
+6. **Run on physical device**
+    - Connect your device to Xcode.
     - Build and run `UnitySwiftUI` scheme to your device.
 
 ## Key features
 
-- **Control of Unity view** as a SwiftUI element that can be repositioned and resized. Unity's [documentation](https://docs.unity3d.com/2022.3/Documentation/Manual/UnityasaLibrary-iOS.html) says "Unity as a Library only supports full-screen rendering, and doesn’t support rendering on part of the screen." We have fixed this limitation.
-- **Touches and gestures** on Unity view are processed within Unity.
-- **Restarting** the Unity player.
-- **State data** is sent from native Swift to Unity C# as a struct with members including string, boolean, floating point, integer, and MTLTexture types.
+- Control of Unity view as a SwiftUI element that can be repositioned and resized. Unity's [documentation](https://docs.unity3d.com/2022.3/Documentation/Manual/UnityasaLibrary-iOS.html) says "Unity as a Library only supports full-screen rendering, and doesn’t support rendering on part of the screen." We have fixed this limitation.
+- Touches and gestures on Unity view are processed within Unity.
+- Restarting the Unity player.
+- State is sent from native Swift to Unity C# as a struct with members including string, boolean, floating point, integer, and MTLTexture types.
 
 ## Key files
 
@@ -55,12 +55,12 @@ This is a _reference project_ for those that want to use [Unity as a Library](ht
 
 ### Unity Project
 
-- [**NativeStateManager.cs**](UnityProject/Assets/Scripts/NativeStateManager.cs): Class for receiving and storing native state data.
-- [**RootBehavior.cs**](UnityProject/Assets/Scripts/RootBehavior.cs): Script that renders content - a cube and a spotlight - reacting to state updates and touch events.
-- [**NativeState.h**](UnityProject/Assets/Plugins/iOS/NativeState.h), [**NativeState.m**](UnityProject/Assets/Plugins/iOS/NativeState.m): Plugin enabling flow of state data from native Swift to Unity C#.
+- [**NativeStateManager.cs**](UnityProject/Assets/Scripts/NativeStateManager.cs): Class for receiving and storing native state.
+- [**RootBehavior.cs**](UnityProject/Assets/Scripts/RootBehavior.cs): Script that renders sample scene - cube and spotlight - reacting to state updates and touch events.
+- [**NativeState.h**](UnityProject/Assets/Plugins/iOS/NativeState.h), [**NativeState.m**](UnityProject/Assets/Plugins/iOS/NativeState.m): Plugin enabling flow of state from native Swift to Unity C#.
 - [**UnityFramework.modulemap**](UnityProject/Assets/Plugins/iOS/UnityFramework.modulemap): Custom modulemap for plugin interoperability with Swift.
 - [**PostProcessBuild.cs**](UnityProject/Assets/Editor/PostProcessBuild.cs): Script automating integration of Unity generated Xcode project.
 
 ## Known issues
-- After building Unity project, Xcode workspace may not always reflect latest files and be unable to build. Close and reopen workspace to fix this bad state.
+- After building Unity project, Xcode workspace may not always reflect latest files and be unable to build. Close and reopen workspace to fix this.
 - When running while attached to Xcode, there may be some noticeable delay between device orientation change and UI layout. There should be no such delay when running detached.
