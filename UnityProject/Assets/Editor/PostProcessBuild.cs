@@ -7,7 +7,7 @@ using UnityEditor.iOS.Xcode;
 public class PostProcessBuild
 {
     [UnityEditor.Callbacks.PostProcessBuildAttribute]
-    public static void OnPostprocessBuild(BuildTarget target, string buildPath)
+    public static void OnPostProcessBuild(BuildTarget target, string buildPath)
     {
         /* Edit Unity generated Xcode project to enable Unity as a library:
            github.com/Unity-Technologies/uaal-example/blob/master/docs/ios.md */
