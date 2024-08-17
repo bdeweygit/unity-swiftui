@@ -61,6 +61,8 @@ This is a _reference project_ for those that want to use [Unity as a Library](ht
 - [**UnityFramework.modulemap**](UnityProject/Assets/Plugins/iOS/UnityFramework.modulemap): Custom modulemap for plugin interoperability with Swift.
 - [**PostProcessBuild.cs**](UnityProject/Assets/Editor/PostProcessBuild.cs): Script automating integration of Unity generated Xcode project.
 
+If you want to adapt an existing project based on the [**Unity.swift**](SwiftUIProject/UnitySwiftUI/Unity.swift) file, you will likely need to disable Xcode's `Thread Performance Checker` under `Product` > `Scheme` > `Edit Scheme` > `Run` > `Diagnostics` > `Runtime API Checking`. The file has a comment explaining this.
+
 ## Known issues
 - After building Unity project, Xcode workspace may not always reflect latest files and be unable to build. Close and reopen workspace to fix this.
 - When running while attached to Xcode, there may be some noticeable delay between device orientation change and UI layout. There should be no such delay when running detached.
