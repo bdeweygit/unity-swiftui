@@ -24,7 +24,7 @@ This is a _reference project_ for those that want to use [Unity as a Library](ht
 
 3. **Open and build Unity project**
     - Use Unity Hub to open `UnityProject` directory.
-    - Go to `File > Build Settings`.
+    - Go to `File` > `Build Settings`.
     - In platform menu, select `iOS` and click `Switch Platform`.
     - Click `Build` and choose `Builds/iOS` folder you created earlier.
 
