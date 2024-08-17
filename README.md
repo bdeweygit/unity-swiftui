@@ -7,7 +7,7 @@ This is a _reference project_ for those that want to use [Unity as a Library](ht
 ## Requirements
 
 - Physical device with iOS 17.5 or later.
-- Unity Editor 2022.3.37f1 - latest LTS as of Jul 9, 2024 - with iOS build support installed in Unity Hub.
+- Unity Editor 2022.3.42f1 - latest LTS as of Aug 13, 2024 - with iOS build support installed in Unity Hub.
 
 ## Instructions
 
