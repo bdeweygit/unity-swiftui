@@ -37,7 +37,7 @@ public class RootBehavior : MonoBehaviour
 
             if (state.visible)
             {
-                // Rotate in same direciton as touch delta
+                // Rotate in same direction as touch delta
                 Vector2 delta = touch.deltaPosition * 0.1f;
                 cube.transform.Rotate(delta.y, -delta.x, 0, Space.World);
             }
