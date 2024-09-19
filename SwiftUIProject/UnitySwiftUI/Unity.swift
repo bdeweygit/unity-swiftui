@@ -24,12 +24,13 @@ class Unity: SetsNativeState, ObservableObject  {
         bundle.load()
         framework = bundle.principalClass!.getInstance()!
 
-        // Set header for framework's CrashReporter; is this needed?
-        let machineHeader = UnsafeMutablePointer<MachHeader>.allocate(capacity: 1)
-        machineHeader.pointee = _mh_execute_header
-        framework.setExecuteHeader(machineHeader)
+        /* Send our executable's header data to Unity's CrashReporter.
+           Using _mh_execute_header might be more correct, but this is broken on
+           Xcode 16. See forum discussion: forums.developer.apple.com/forums/thread/760543 */
+        let executeHeader = #dsohandle.assumingMemoryBound(to: MachHeader.self)
+        framework.setExecuteHeader(executeHeader)
 
-        // Set bundle containing framework's data folder
+        // Set bundle containing Unity's data folder
         framework.setDataBundleId("com.unity3d.framework")
 
         /* Register as the native state setter. We have disabled the
@@ -57,7 +58,7 @@ class Unity: SetsNativeState, ObservableObject  {
         /* The player finishes starting - runEmbedded() returns - before completing
            its first render. If the view is displayed immediately it often shows the
            content leftover from the previous run until Unity renders again and overwrites it.
-           Clearing Unity's content with transparent color before restart hides this brief artifact. */
+           Clearing Unity's layer with transparent color before restart hides this brief artifact. */
         if let layer = framework.appController()?.rootView?.layer as? CAMetalLayer, let drawable = layer.nextDrawable(), let buffer = MTLCreateSystemDefaultDevice()?.makeCommandQueue()?.makeCommandBuffer() {
             let descriptor = MTLRenderPassDescriptor()
             descriptor.colorAttachments[0].loadAction = .clear
