@@ -55,7 +55,7 @@ class Unity: SetsNativeState, ObservableObject  {
         })
         loadingGroup.wait()
 
-        /* The player finishes starting - runEmbedded() returns - before completing
+        /* Unity finishes starting - runEmbedded() returns - before completing
            its first render. If the view is displayed immediately it often shows the
            content leftover from the previous run until Unity renders again and overwrites it.
            Clearing Unity's layer with transparent color before restart hides this brief artifact. */
@@ -79,7 +79,7 @@ class Unity: SetsNativeState, ObservableObject  {
             }
         }
 
-        // Start the player
+        // Start Unity
         framework.runEmbedded(withArgc: CommandLine.argc, argv: CommandLine.unsafeArgv, appLaunchOpts: nil)
 
         // Hide Unity's UIWindow so it won't display UIView or intercept touches
