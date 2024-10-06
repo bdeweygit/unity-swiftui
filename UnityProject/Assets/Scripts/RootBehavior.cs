@@ -17,7 +17,8 @@ public class RootBehavior : MonoBehaviour
         Color nextColor;
         ColorUtility.TryParseHtmlString(state.spotlight, out nextColor);
         Texture2D nextMainTexture = null;
-        if (state.texture != System.IntPtr.Zero) {
+        if (state.texture != System.IntPtr.Zero)
+        {
             /* In practice it looks like our values for width and height are ignored.
                It probably determines correct values from native MTLTexture's own properties.
                Documentation still insists that we pass correct width and height values, so we will. */
