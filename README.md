@@ -1,6 +1,6 @@
 # unity-swiftui
 
-This is a _reference project_ for those that want to use [Unity as a Library](https://unity.com/features/unity-as-a-library) in their SwiftUI iOS app. Unity's [existing iOS documentation](https://github.com/Unity-Technologies/uaal-example/blob/master/docs/ios.md) only demonstrates UAAL with UIKit/Objective-C projects and lacks illustrative examples of native-to-unity state flow, control of the Unity view, and automated integration of Unity's build output.
+This is a _reference project_ for how to integrate [Unity as a Library](https://unity.com/features/unity-as-a-library) with a SwiftUI iOS app. Unity's [existing iOS documentation](https://github.com/Unity-Technologies/uaal-example/blob/master/docs/ios.md) only demonstrates UAAL with UIKit/Objective-C projects and lacks illustrative examples of native-to-unity state flow, control of the Unity view, and automated integration of Unity's build output.
 
 ![Screen recording](recording.gif)
 
@@ -37,11 +37,11 @@ This is a _reference project_ for those that want to use [Unity as a Library](ht
 
 6. **Run on physical device**
     - Connect your device to Xcode.
-    - Build and run `UnitySwiftUI` scheme to your device.
+    - Build and run `UnitySwiftUI` scheme on your device.
 
 ## Key features
 
-- Control of Unity view as a SwiftUI element that can be repositioned and resized. Unity's [documentation](https://docs.unity3d.com/2022.3/Documentation/Manual/UnityasaLibrary-iOS.html) says "Unity as a Library only supports full-screen rendering, and doesn’t support rendering on part of the screen." We have fixed this limitation.
+- Control of Unity view as a SwiftUI element that can be repositioned and resized. Unity's [documentation](https://docs.unity3d.com/2022.3/Documentation/Manual/UnityasaLibrary-iOS.html) says "Unity as a Library only supports full-screen rendering, and doesn’t support rendering on part of the screen." This limitation has been fixed.
 - Touches and gestures on Unity view are processed within Unity.
 - Restarting the Unity player.
 - State is sent from native Swift to Unity C# as a struct with members including string, boolean, floating point, integer, and MTLTexture types.
@@ -61,8 +61,21 @@ This is a _reference project_ for those that want to use [Unity as a Library](ht
 - [**UnityFramework.modulemap**](UnityProject/Assets/Plugins/iOS/UnityFramework.modulemap): Custom modulemap for plugin interoperability with Swift.
 - [**PostProcessBuild.cs**](UnityProject/Assets/Editor/PostProcessBuild.cs): Script automating integration of Unity generated Xcode project.
 
-If you want to adapt an existing project based on the [**Unity.swift**](SwiftUIProject/UnitySwiftUI/Unity.swift) file, you will likely need to disable Xcode's `Thread Performance Checker` under `Product` > `Scheme` > `Edit Scheme` > `Run` > `Diagnostics` > `Runtime API Checking`. The file has a comment explaining this.
+If you want to adapt an existing project based on the [**plugin**](UnityProject/Assets/Plugins/iOS/NativeState.h), you will likely need to disable Xcode's `Thread Performance Checker` under `Product` > `Scheme` > `Edit Scheme` > `Run` > `Diagnostics` > `Runtime API Checking`. The [**Unity.swift**](SwiftUIProject/UnitySwiftUI/Unity.swift) file has a comment explaining this.
 
 ## Known issues
+
 - After building Unity project, Xcode workspace may not always reflect latest files and be unable to build. Close and reopen workspace to fix this.
 - When running while attached to Xcode, there may be some noticeable delay between device orientation change and UI layout. There should be no such delay when running detached.
+
+## Wish list
+
+Potential improvements to the project. These are good challenges if you want to contribute.
+
+- Get SwiftUI project to run on the simulator.
+- Get Unity project to run in the Unity Editor. Technically it does run, but it does so without native state on which the scene relies. See the `#if !UNITY_EDITOR` preprocessor directive in [**NativeStateManager.cs**](UnityProject/Assets/Scripts/NativeStateManager.cs).
+- Add support for transparent background in the Unity view. Will this ruin some of Unity's shaders?
+- Deallocate native textures when Unity is stopped. If we're not going to load the textures until Unity starts, then it makes sense to unload them when Unity stops. What is an elegant way to do this without causing a null pointer exception when Unity is restarted?
+- Hide [**plugin's**](UnityProject/Assets/Plugins/iOS/NativeState.m) `RegisterNativeStateSetter` function from C#. This function should only be called from Swift, but it can still be imported and called from C#. Can we prevent this?
+- Convert from a reference project to a plugin. Goal would be to make integration as easy as installing some plugins. Is this even possible? Would it be a Unity plugin with an accompanying SwiftPM package? How will it accommodate arbitrary state structure?
+- Add tests. What can/should we verify with tests? Do we need a separate suite in each of the SwiftUI and Unity projects, or something more unified?
