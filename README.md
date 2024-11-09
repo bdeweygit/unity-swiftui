@@ -67,6 +67,7 @@ If you want to adapt an existing project based on the [**plugin**](UnityProject/
 
 - After building Unity project, Xcode workspace may not always reflect latest files and be unable to build. Close and reopen workspace to fix this.
 - When running while attached to Xcode, there may be some noticeable delay between device orientation change and UI layout. There should be no such delay when running detached.
+- If you start a native animation and some kind of Unity effect with identical physics at the same time, they will gradually fall out-of-sync due to ongoing phase shift between the native and Unity render loops, even if FPS is the same. In a private project I have mitigated this by directly editing files in Unity's build output to take control of driving the Unity render loop, but this is a risky and difficult hack to perform correctly.
 
 ## Wish list
 
