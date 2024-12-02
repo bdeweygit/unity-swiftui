@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "com.apple.unityplugin.core": "file:../LocalPackages/com.apple.unityplugin.core-3.1.5.tgz",
+    "com.apple.unityplugin.corehaptics": "file:../LocalPackages/com.apple.unityplugin.corehaptics-1.2.2.tgz",
     "com.unity.collab-proxy": "2.5.2",
     "com.unity.feature.development": "1.0.1",
     "com.unity.textmeshpro": "3.0.7",

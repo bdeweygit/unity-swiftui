@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "com.apple.unityplugin.core": {
+      "version": "file:../LocalPackages/com.apple.unityplugin.core-3.1.5.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
+    },
+    "com.apple.unityplugin.corehaptics": {
+      "version": "file:../LocalPackages/com.apple.unityplugin.corehaptics-1.2.2.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {
+        "com.apple.unityplugin.core": "3.1.5"
+      }
+    },
     "com.unity.collab-proxy": {
       "version": "2.5.2",
       "depth": 0,
