@@ -1,32 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7571175315432008280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6b8a8fe473224decaaecc9264d56e95, type: 3}
-  m_Name: AppleCoreBuildStep
-  m_EditorClassIdentifier: 
-  IsEnabled: 1
---- !u!114 &-6712646829797300673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6593ffabfd184432aaf22d6c79cffa30, type: 3}
-  m_Name: CHBuildStep
-  m_EditorClassIdentifier: 
-  IsEnabled: 1
---- !u!114 &-5121095628031922214
+--- !u!114 &-6589141939449498242
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,6 +34,21 @@ MonoBehaviour:
   AllowMusicReadWrite: 0
   AllowMoviesReadOnly: 0
   AllowMoviesReadWrite: 0
+--- !u!114 &-3091237122839058667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe2e2f0820ab4779ac857f0e06bac5fb, type: 3}
+  m_Name: AppleUserManagementBuildStep
+  m_EditorClassIdentifier: 
+  IsEnabled: 0
+  AllowGetCurrentUser: 0
+  AllowRunsAsCurrentUser: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,7 +70,7 @@ MonoBehaviour:
   AppUsesNonExemptEncryption: 0
   AutomateEntitlements: 1
   DefaultEntitlements: {fileID: 0}
---- !u!114 &567874045514025974
+--- !u!114 &1335289811090185100
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,9 +79,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe2e2f0820ab4779ac857f0e06bac5fb, type: 3}
-  m_Name: AppleUserManagementBuildStep
+  m_Script: {fileID: 11500000, guid: c6b8a8fe473224decaaecc9264d56e95, type: 3}
+  m_Name: AppleCoreBuildStep
   m_EditorClassIdentifier: 
-  IsEnabled: 0
-  AllowGetCurrentUser: 0
-  AllowRunsAsCurrentUser: 0
+  IsEnabled: 1
+--- !u!114 &2974711841652960970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6593ffabfd184432aaf22d6c79cffa30, type: 3}
+  m_Name: CHBuildStep
+  m_EditorClassIdentifier: 
+  IsEnabled: 1

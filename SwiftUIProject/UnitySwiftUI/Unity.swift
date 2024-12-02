@@ -119,6 +119,7 @@ class Unity: SetsNativeState, ObservableObject  {
     private var checkerboardTexture: MTLTexture?
     @Published var visible = true { didSet { stateDidSet() } }
     @Published var scale: Float = 1 { didSet { stateDidSet() } }
+    @Published var fps: Float = 1 { didSet { stateDidSet() } }
     @Published var texture = Texture.none { didSet { stateDidSet() } }
     @Published var spotlight = LightTemperature.neutral { didSet { stateDidSet() } }
 
@@ -132,7 +133,7 @@ class Unity: SetsNativeState, ObservableObject  {
         let textureHeight_C = CInt(textureInstance?.height ?? 0)
         let texture_C = textureInstance.flatMap({ Unmanaged.passUnretained($0) })
         spotlight.rawValue.withCString({ spotlight_C in
-            let nativeState = NativeState(scale: scale, visible: visible, spotlight: spotlight_C, textureWidth: textureWidth_C, textureHeight: textureHeight_C, texture: texture_C)
+            let nativeState = NativeState(scale: scale, fps: fps, visible: visible, spotlight: spotlight_C, textureWidth: textureWidth_C, textureHeight: textureHeight_C, texture: texture_C)
             setNativeState?(nativeState)
         })
     }

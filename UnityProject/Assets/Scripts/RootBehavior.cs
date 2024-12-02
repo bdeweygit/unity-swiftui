@@ -9,11 +9,22 @@ public class RootBehavior : MonoBehaviour
     public GameObject cube;
     private GameObject touchIndicator;
 
+    public void SetFPS(int fps){
+        int currentFPS = Application.targetFrameRate;
+        if (currentFPS != fps){
+            Debug.Log("FPS setting to:" + fps);
+            Application.targetFrameRate = fps;
+            QualitySettings.vSyncCount = 0;
+        }
+    }
+
     void Update()
     {
         // Create next state
         NativeState state = NativeStateManager.State;
         Vector3 nextLocalScale = new Vector3(state.scale, state.scale, state.scale);
+        int newFPS = (int)state.fps;
+        SetFPS(newFPS);
         Color nextColor;
         ColorUtility.TryParseHtmlString(state.spotlight, out nextColor);
         Texture2D nextMainTexture = null;

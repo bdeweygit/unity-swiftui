@@ -2,6 +2,7 @@
 
 struct NativeState {
     const float scale;
+    const float fps;
     const bool visible;
     const char* _Nonnull spotlight;
     const int textureWidth;

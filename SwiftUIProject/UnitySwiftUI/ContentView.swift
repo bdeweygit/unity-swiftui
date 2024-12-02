@@ -46,6 +46,10 @@ struct ContentView: View {
                                     Text(String(format: "Scale %.2f", unity.scale))
                                     Slider(value: $unity.scale, in: 1...3)
                                 })
+                                HStack(content: {
+                                    Text(String(format: "FPS %.2f", unity.fps))
+                                    Slider(value: $unity.fps, in: 30...120)
+                                })
                                 Picker("Texture", selection: $unity.texture, content: {
                                     Text("Default").tag(Unity.Texture.none)
                                     Text("Marble").tag(Unity.Texture.marble)

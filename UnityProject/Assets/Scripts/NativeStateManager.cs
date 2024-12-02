@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 public readonly struct NativeState
 {
     public readonly float scale;
+    public readonly float fps;
     [MarshalAs(UnmanagedType.U1)] // 1-byte native C bool
     public readonly bool visible;
     public readonly string spotlight;
